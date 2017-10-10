@@ -1,4 +1,5 @@
 import json, os
+from nltk.sentiment.vader import SentimentIntensityAnalyzer as si
 
 
 class FileTreat():
@@ -53,8 +54,34 @@ class FileTreat():
 
 		return tweets
 
+	def getBadWithLabel(self):
+		tweets = self.getBadTweets()
+		Y = [ -1 for i in range(len(tweets))]
+
+		return (tweets, Y)
+
+	def getGoodWithLabel(self):
+		tweets = self.getGoodTweets()
+		Y = [ 1 for i in range(len(tweets))]
+
+		return (tweets, Y)
+
+	def getWithLabel(self, withSort=False):
+		tuplg = self.getGoodWithLabel()
+		tuplb = self.getBadWithLabel()
+
+		tuplg[0].extend(tuplb[0])
+		tuplg[1].extend(tuplb[1])
+
+		return tuplg
+
+	def getPolarity(self, text):
+		sid = si()
+		return sid.polarity_scores(text)
 
 
-#file = FileTreat()
 
-#print(file.getTweets())
+
+file = FileTreat()
+
+print(file.getPolarity("you are the best person in the world, honey"))
