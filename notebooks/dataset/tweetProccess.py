@@ -135,19 +135,39 @@ class FileTreat():
 			lista.append(self.getUserMeanPolarity(user))
 		return lista
 
+	def getTweetTextWithLabel(self):
+		tweets = self.getBadTweets()
+		print(len(tweets))
+		tupl = (tweets, [-1 for i in range(len(tweets))])
+		tweets = self.getGoodTweets()[0:len(tweets)]
+		print(len(tweets))
+		tupl[0].extend(tweets)
+		tupl[1].extend([1 for i in range(len(tweets))])
+
+		return tupl
+
+	def _getAsDocument(self, items):
+		content = []
+		for reg in items:
+			text=''
+			#content.extend(reg['tweets'])
+			for item in reg['tweets']:
+				text = text + '\n\n\n' + item['text']
+			content.append(text)
+			
+		return content
+
+	def getAsDocument(self):
+		tweets = self._getAsDocument(self._content)
+		tupl = (tweets, [-1 for i in range(len(tweets))])
+		tweets = self._getAsDocument(self._goodContent)
+		tupl[0].extend(tweets)
+		tupl[1].extend([1 for i in range(len(tweets))])
+
+		return tupl
 
 
 #file = FileTreat()
 
 
 #print(file.getUsersMeanPolarity(None))
-
-
-'''plt.hist([0,8,6,8,0,7,65,64,56,45,3,4,6,345,34,5,345,3,2,24,23,4,23,42,34,3,24,34,3,4,34], facecolor='green', alpha=0.75)
-plt.xlabel('Smarts')
-plt.ylabel('Probability')
-plt.title(r'$\mathrm{Histogram\ of\ IQ:}\ \mu=100,\ \sigma=15$')
-plt.axis([40, 160, 0, 0.03])
-plt.grid(True)
-
-plt.show()'''
